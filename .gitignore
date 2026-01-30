@@ -27,3 +27,4 @@ yarn-error.log*
 dist/
 .aider*
 .env
+server/node_modules/
