@@ -1,0 +1,45 @@
+services:
+  # Development configuration
+  # Use: docker-compose up dev
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+      args:
+        VITE_WS_URL: /ws
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - UPSTREAM_URL=wss://chatmud.com:9876
+      - PERSISTENCE_TIMEOUT_MS=300000
+      - MAX_BUFFER_MESSAGES=100
+      - MAX_BUFFER_SIZE=10240
+    restart: unless-stopped
+
+  # Production configuration
+  # Use: docker-compose up production
+  production:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+      args:
+        VITE_WS_URL: /ws
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - UPSTREAM_URL=wss://chatmud.com:9876
+      - PERSISTENCE_TIMEOUT_MS=300000
+      - MAX_BUFFER_MESSAGES=100
+      - MAX_BUFFER_SIZE=10240
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
